@@ -1,63 +1,44 @@
 class Solution {
 public:
-    vector<int> survivedRobotsHealths(vector<int>& positions, vector<int>& healths, string directions) {
+    vector<int> survivedRobotsHealths(vector<int>& positions,
+                                      vector<int>& healths, string directions) {
         int n = positions.size();
+        vector<int> indices(n), result;
+        stack<int> stack;
 
-        vector<tuple<int,int,char,int>> robots;
-        for(int i = 0; i < n; i++) {
-            robots.push_back({positions[i], healths[i], directions[i], i});
+        for (int index = 0; index < n; ++index) {
+            indices[index] = index;
         }
 
-        sort(robots.begin(), robots.end());
+        sort(indices.begin(), indices.end(),
+             [&](int lhs, int rhs) { return positions[lhs] < positions[rhs]; });
 
-        stack<int> st;
-        vector<int> currHealth(n);
-
-        for(int i = 0; i < n; i++) {
-            currHealth[i] = get<1>(robots[i]);
-        }
-
-        for(int i = 0; i < n; i++) {
-            auto &[pos, health, dir, idx] = robots[i];
-
-            if(dir == 'R') {
-                st.push(i);
+        for (int currentIndex : indices) {
+            if (directions[currentIndex] == 'R') {
+                stack.push(currentIndex);
             } else {
-                while(!st.empty() && currHealth[i] > 0) {
-                    int j = st.top();
-
-                    if(currHealth[j] < currHealth[i]) {
-                        st.pop();
-                        currHealth[i]--;
-                    }
-                    else if(currHealth[j] > currHealth[i]) {
-                        currHealth[j]--;
-                        currHealth[i] = 0;
-                        break;
-                    }
-                    else {
-                        st.pop();
-                        currHealth[i] = 0;
-                        break;
+                while (!stack.empty() && healths[currentIndex] > 0) {
+                    int topIndex = stack.top();
+                    stack.pop();
+                    if (healths[topIndex] > healths[currentIndex]) {
+                        healths[topIndex] -= 1;
+                        healths[currentIndex] = 0;
+                        stack.push(topIndex);
+                    } else if (healths[topIndex] < healths[currentIndex]) {
+                        healths[currentIndex] -= 1;
+                        healths[topIndex] = 0;
+                    } else {
+                        healths[currentIndex] = 0;
+                        healths[topIndex] = 0;
                     }
                 }
             }
         }
-        vector<pair<int,int>> survivors;
-
-        for(int i = 0; i < n; i++) {
-            if(currHealth[i] > 0) {
-                survivors.push_back({get<3>(robots[i]), currHealth[i]});
+        for (int index = 0; index < n; ++index) {
+            if (healths[index] > 0) {
+                result.push_back(healths[index]);
             }
         }
-
-        sort(survivors.begin(), survivors.end());
-
-        vector<int> result;
-        for(auto &p : survivors) {
-            result.push_back(p.second);
-        }
-
         return result;
     }
 };
