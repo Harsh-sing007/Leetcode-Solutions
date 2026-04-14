@@ -35,11 +35,11 @@ public:
                            calculateMinDistance(robotIdx + 1, factoryIdx + 1,
                                                 robot, factoryPositions, memo);
 
-        // Option 2: Skip current factory for the current robot
+   
         long long skip = calculateMinDistance(robotIdx, factoryIdx + 1, robot,
                                               factoryPositions, memo);
 
         return memo[robotIdx][factoryIdx] =
-                   min(assign, skip);  // Take the minimum and store in memo
+                   min(assign, skip); 
     }
 };
