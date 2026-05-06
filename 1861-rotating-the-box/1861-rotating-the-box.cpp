@@ -37,9 +37,6 @@ public:
                             break;
                         }
                     }
-
-                    // If a stone was found above, let it fall into the empty
-                    // cell `result[i][j]`
                     if (nextRowWithStone != -1) {
                         result[nextRowWithStone][j] = '.';
                         result[i][j] = '#';
