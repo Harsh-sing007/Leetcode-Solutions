@@ -3,9 +3,7 @@ public:
     vector<vector<int>> rotateGrid(vector<vector<int>>& grid, int k) {
         int m = grid.size();
         int n = grid[0].size();
-        int nlayer = min(m / 2, n / 2);  // level count
-        // enumerate each layer counterclockwise starting from the top-left
-        // corner
+        int nlayer = min(m / 2, n / 2);  
         for (int layer = 0; layer < nlayer; ++layer) {
             vector<int> r, c,
                 val;  // each element's row index, column index, and value
@@ -30,12 +28,10 @@ public:
                 val.push_back(grid[layer][j]);
             }
             int total = val.size();  // total number of elements in each layer
-            int kk = k % total;      // equivalent number of rotations
-            // find the value at each index after rotation
+            int kk = k % total;     
             for (int i = 0; i < total; ++i) {
                 int idx =
-                    (i + total - kk) % total;  // the index corresponding to the
-                                               // value after rotation
+                    (i + total - kk) % total;  
                 grid[r[i]][c[i]] = val[idx];
             }
         }
