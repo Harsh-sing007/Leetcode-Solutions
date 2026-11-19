@@ -14,7 +14,7 @@ public:
             even = even->next;
         }
 
-        odd->next = evenHead; // Connect odd list to even list
+        odd->next = evenHead; 
         return head;
     }
 };
